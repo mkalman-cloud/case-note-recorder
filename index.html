@@ -1,297 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Case‑Note Recorder</title>
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Case‑Note Recorder" />
-  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Crect width='256' height='256' rx='56' fill='%23000'/%3E%3Cpath d='M64 88h128v24H64zm0 40h128v24H64zm0 40h88v24H64z' fill='%23fff'/%3E%3C/svg%3E" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Case-Note Recorder</title>
   <style>
-    :root { --bg:#0b0b0c; --card:#141418; --fg:#f5f5f7; --muted:#b3b3b7; --accent:#4da3ff; --danger:#ff5b6e; --ok:#2ecc71; }
-    html, body { height:100%; }
-    body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; background:var(--bg); color:var(--fg); }
-    .container { max-width: 820px; margin: 0 auto; padding: 20px 16px 80px; }
-    .title { font-size: 28px; font-weight: 800; letter-spacing: .2px; margin: 8px 0 2px; }
-    .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
-    .card { background: var(--card); border-radius: 18px; padding: 16px; box-shadow: 0 8px 24px rgba(0,0,0,.35); margin-bottom: 14px; }
-    .row { display:flex; gap:10px; flex-wrap: wrap; align-items: center; }
-    .btn { -webkit-tap-highlight-color: transparent; display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:14px 16px; border-radius:14px; border:1px solid rgba(255,255,255,.08); color:var(--fg); background:#1b1b22; font-weight:700; font-size:16px; cursor:pointer; box-shadow: inset 0 0 0 1px rgba(255,255,255,.04); }
-    .btn:disabled { opacity:.5; cursor:not-allowed; }
-    .btn.primary { background: linear-gradient(180deg, #2766ff, #1744c5); border-color: rgba(255,255,255,.1); }
-    .btn.stop { background: linear-gradient(180deg, #ff6262, #c81d1d); }
-    .btn.ghost { background: transparent; }
-    .badge { padding:6px 10px; border-radius:999px; background:#16161c; border:1px solid rgba(255,255,255,.08); color:var(--muted); font-size:12px; }
-    .meter { height: 12px; background:#101016; border-radius: 999px; overflow:hidden; border:1px solid rgba(255,255,255,.08); }
-    .meter > div { height:100%; width: 0%; background: linear-gradient(90deg, #4da3ff, #2ecc71); transition: width .1s linear; }
-    .muted { color: var(--muted); font-size: 13px; }
-    .audio-list a { display:block; padding:8px 10px; border-radius:12px; text-decoration:none; color:var(--fg); background:#101016; border:1px solid rgba(255,255,255,.06); }
-    label { display:block; font-weight:700; margin:12px 0 6px; }
-    input, textarea, select { width:100%; background:#0f0f14; color:var(--fg); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:12px; font-size:15px; }
-    textarea { min-height: 100px; resize: vertical; }
-    .grid { display:grid; gap:12px; grid-template-columns: 1fr; }
-    .footer { position:fixed; bottom:0; left:0; right:0; background:linear-gradient(180deg, rgba(11,11,12,0), var(--bg) 30%); padding: 18px 16px; }
-    .footer .inner { max-width:820px; margin:0 auto; display:flex; gap:10px; }
-    .pill { border-radius: 999px; padding: 6px 10px; background: #0e0e13; border:1px solid rgba(255,255,255,.08); }
-    dialog::backdrop { background: rgba(0,0,0,.55); }
-    dialog { border:none; border-radius: 16px; padding: 0; overflow: hidden; background: var(--card); color: var(--fg); width: min(680px, 92vw); }
-    .modal-header { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid rgba(255,255,255,.08); }
-    .modal-body { padding:16px; max-height: 70vh; overflow:auto; }
-    .code { background:#0a0a0e; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.08); white-space:pre-wrap; }
+    body {
+      background-color: #111;
+      color: #eee;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 2em;
+      text-align: center;
+    }
+    h1 {
+      color: #fff;
+      margin-bottom: 0.5em;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.25em;
+      text-align: left;
+    }
+    input, textarea {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto 1em auto;
+      display: block;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background-color: #222;
+      color: white;
+      font-size: 14px;
+    }
+    button {
+      margin: 0.5em;
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      color: white;
+    }
+    #startBtn { background-color: #007bff; }
+    #stopBtn { background-color: #dc3545; }
+    #clearBtn { background-color: #666; }
+    #status { margin: 1em 0; font-weight: bold; }
+    #output {
+      background: #222;
+      color: #0f0;
+      text-align: left;
+      padding: 1em;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      max-width: 700px;
+      margin: 1em auto;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="title">Case‑Note Recorder</div>
-    <div class="subtitle">Tap <strong>Start</strong> to record. Tap <strong>Stop</strong> to end and generate your case‑note using your preferred structure.</div>
+  <h1>Case-Note Recorder</h1>
 
-    <div class="card">
-      <div class="row" style="justify-content:space-between;">
-        <div class="row">
-          <span class="badge" id="status">Idle</span>
-          <span class="badge" id="format">Format: –</span>
-          <span class="badge" id="timer">00:00</span>
-          <span class="badge" id="wakelock">Wake Lock: n/a</span>
-        </div>
-        <div class="row">
-          <button class="btn primary" id="startBtn">▶ Start</button>
-          <button class="btn stop" id="stopBtn" disabled>■ Stop</button>
-        </div>
-      </div>
-      <div style="margin-top:12px;" class="meter"><div id="level"></div></div>
-      <div class="row" style="margin-top:8px; justify-content:space-between;">
-        <span class="muted">Tip: On iPhone, keep the screen awake while recording for best reliability. See “iPhone Tips” below.</span>
-        <button class="btn ghost" id="cmdBtn" title="Experimental voice commands">🎤 Commands</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="row" style="justify-content:space-between;">
-        <div class="badge">Recordings</div>
-        <button class="btn ghost" id="clearList">Clear</button>
-      </div>
-      <div id="list" class="audio-list" style="margin-top:8px; display:grid; gap:8px;"></div>
-    </div>
-
-    <div class="card">
-      <div class="badge">iPhone Tips</div>
-      <ul>
-        <li class="muted">Add to Home Screen works when this page is opened in <strong>Safari</strong> from an <strong>https://</strong> address (not a local file or in-app preview).</li>
-        <li class="muted">Keep screen awake: Settings ▸ Display & Brightness ▸ Auto‑Lock ▸ <strong>Never</strong> (or use Guided Access) during recording.</li>
-        <li class="muted">Background recording while the screen is locked is <strong>not reliable on iOS Safari for any website</strong>. Keep the screen on to ensure continuous capture.</li>
-      </ul>
-    </div>
+  <!-- ✅ Step 1: API Endpoint Input -->
+  <div>
+    <label for="apiBase">AI API Endpoint (Vercel)</label>
+    <input id="apiBase" type="text" placeholder="https://case-note-api.vercel.app" />
   </div>
 
-  <div class="footer">
-    <div class="inner">
-      <span class="pill">After stopping, you’ll be prompted to create a case‑note.</span>
-    </div>
+  <!-- ✅ Step 2: Client Name Input -->
+  <div>
+    <label for="clientName">Client Name (optional)</label>
+    <input id="clientName" type="text" placeholder="e.g. Josh G" />
   </div>
 
-  <!-- Case‑note modal -->
-  <dialog id="noteModal">
-    <div class="modal-header">
-      <strong>Create Case‑Note</strong>
-      <button class="btn ghost" onclick="noteModal.close()">✕</button>
-    </div>
-    <div class="modal-body">
-      <form id="noteForm" class="grid">
-        <div class="grid" style="grid-template-columns:1fr 1fr;">
-          <div>
-            <label>Client name</label>
-            <input name="client" placeholder="e.g., Josh G" required />
-          </div>
-          <div>
-            <label>Date</label>
-            <input name="date" type="date" />
-          </div>
-        </div>
-        <div class="grid" style="grid-template-columns:1fr 1fr;">
-          <div>
-            <label>Activity (what you did together)</label>
-            <input name="activity" placeholder="e.g., phone call to employer" required />
-          </div>
-          <div>
-            <label>Purpose (why)</label>
-            <input name="purpose" placeholder="e.g., build confidence returning calls" required />
-          </div>
-        </div>
-        <div>
-          <label>Observations / What came up</label>
-          <textarea name="observations" placeholder="Client felt anxious about saying the wrong thing…"></textarea>
-        </div>
-        <div>
-          <label>Outcomes</label>
-          <textarea name="outcomes" placeholder="Together you called Michelle; interview scheduled for 14 Oct…"></textarea>
-        </div>
-        <div>
-          <label>Next step (required)</label>
-          <textarea name="next" required placeholder="Book a prep session next Tuesday; practice 2 mock Qs; confirm transport"></textarea>
-        </div>
-        <div class="row" style="justify-content:flex-end; gap:8px;">
-          <button type="button" class="btn ghost" onclick="noteModal.close()">Cancel</button>
-          <button class="btn primary" type="submit">Generate</button>
-        </div>
-      </form>
-      <div id="noteOutputWrap" style="display:none; margin-top:12px;">
-        <div class="badge">Generated Note</div>
-        <pre id="noteOutput" class="code"></pre>
-        <div class="row" style="justify-content:flex-end; gap:8px;">
-          <button class="btn" id="copyNote">Copy</button>
-          <button class="btn" id="downloadNote">Download .txt</button>
-        </div>
-      </div>
-    </div>
-  </dialog>
+  <!-- ✅ Step 3: Controls -->
+  <div>
+    <button id="startBtn">🎙️ Start</button>
+    <button id="stopBtn" disabled>⏹️ Stop</button>
+    <button id="clearBtn">🧹 Clear</button>
+  </div>
+
+  <div id="status">Stopped</div>
+
+  <h3>Generated Case Note</h3>
+  <div id="output"></div>
 
   <script>
-  (() => {
-    const startBtn = document.getElementById('startBtn');
-    const stopBtn = document.getElementById('stopBtn');
-    const statusEl = document.getElementById('status');
-    const formatEl = document.getElementById('format');
-    const timerEl = document.getElementById('timer');
-    const levelEl = document.getElementById('level');
-    const listEl = document.getElementById('list');
-    const clearListBtn = document.getElementById('clearList');
-    const cmdBtn = document.getElementById('cmdBtn');
-    const wakelockEl = document.getElementById('wakelock');
+    // --- Remember API base URL locally ---
+    const apiInput = document.getElementById("apiBase");
+    const savedBase = localStorage.getItem("CASE_NOTE_API_BASE");
+    if (savedBase) apiInput.value = savedBase;
 
-    const noteModal = document.getElementById('noteModal');
-    const noteForm = document.getElementById('noteForm');
-    const noteOutput = document.getElementById('noteOutput');
-    const noteOutputWrap = document.getElementById('noteOutputWrap');
-    const copyNoteBtn = document.getElementById('copyNote');
-    const downloadNoteBtn = document.getElementById('downloadNote');
+    apiInput.addEventListener("change", () => {
+      localStorage.setItem("CASE_NOTE_API_BASE", apiInput.value.trim());
+    });
 
-    let mediaRecorder; let chunks = []; let startTs; let timerInt; let stream; let analyser; let raf;
-    let wakeLock; let recognition; let recognizing = false;
+    // --- Recorder setup ---
+    let mediaRecorder;
+    let audioChunks = [];
 
-    const fmt = (s) => s<10 ? '0'+s : ''+s;
-    function updateTimer() {
-      const secs = Math.floor((Date.now() - startTs)/1000);
-      const m = Math.floor(secs/60), s = secs%60; timerEl.textContent = `${fmt(m)}:${fmt(s)}`;
-    }
+    const startBtn = document.getElementById("startBtn");
+    const stopBtn = document.getElementById("stopBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const output = document.getElementById("output");
+    const status = document.getElementById("status");
 
-    async function acquireWakeLock() {
+    startBtn.onclick = async () => {
       try {
-        if ('wakeLock' in navigator) {
-          wakeLock = await navigator.wakeLock.request('screen');
-          wakelockEl.textContent = 'Wake Lock: on';
-          wakeLock.addEventListener('release', () => { wakelockEl.textContent = 'Wake Lock: released'; });
-        } else {
-          wakelockEl.textContent = 'Wake Lock: unavailable';
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+
+        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+        mediaRecorder.onstop = handleStop;
+
+        mediaRecorder.start();
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+        status.textContent = "Recording...";
+      } catch (err) {
+        alert("Microphone access denied or unavailable.");
+        console.error(err);
+      }
+    };
+
+    stopBtn.onclick = () => {
+      if (mediaRecorder && mediaRecorder.state !== "inactive") {
+        mediaRecorder.stop();
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+        status.textContent = "Processing audio...";
+      }
+    };
+
+    clearBtn.onclick = () => {
+      output.textContent = "";
+    };
+
+    async function handleStop() {
+      const blob = new Blob(audioChunks, { type: "audio/mp4" });
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = async () => {
+        const base64Audio = reader.result.split(",")[1];
+        const baseUrl = document.getElementById("apiBase").value.trim();
+        const clientName = document.getElementById("clientName").value.trim();
+
+        if (!baseUrl) {
+          alert("Please enter your Vercel API endpoint first.");
+          return;
         }
-      } catch (e) {
-        wakelockEl.textContent = 'Wake Lock: denied';
-      }
-    }
 
-    function releaseWakeLock() { try { wakeLock && wakeLock.release && wakeLock.release(); } catch {} }
+        status.textContent = "Generating case note with AI...";
+        try {
+          const response = await fetch(`${baseUrl}/api/casenote`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              transcript: "[Voice note audio attached]",
+              client: clientName || "Client"
+            })
+          });
 
-    function visualize() {
-      if (!analyser) return; const data = new Uint8Array(analyser.fftSize);
-      function draw() { analyser.getByteTimeDomainData(data); // peak estimate
-        let peak = 0; for (let i=0;i<data.length;i++){ const v=Math.abs(data[i]-128); if (v>peak) peak=v; }
-        const pct = Math.min(100, Math.max(2, (peak/128)*100));
-        levelEl.style.width = pct+'%'; raf = requestAnimationFrame(draw);
-      }
-      draw();
-    }
-
-    async function startRecording() {
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        const mimeType = MediaRecorder.isTypeSupported('audio/mp4;codecs=mp4a')
-          ? 'audio/mp4;codecs=mp4a'
-          : MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '';
-        mediaRecorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
-        formatEl.textContent = 'Format: ' + (mediaRecorder.mimeType || 'default');
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const src = ctx.createMediaStreamSource(stream); analyser = ctx.createAnalyser(); analyser.fftSize = 1024; src.connect(analyser);
-        visualize();
-        chunks = []; mediaRecorder.ondataavailable = (e) => { if (e.data && e.data.size) chunks.push(e.data); };
-        mediaRecorder.onstop = async () => { cancelAnimationFrame(raf); analyser && analyser.disconnect(); try { stream.getTracks().forEach(t=>t.stop()); } catch {}
-          const blob = new Blob(chunks, { type: mediaRecorder.mimeType || 'audio/webm' });
-          const url = URL.createObjectURL(blob);
-          const ts = new Date();
-          const name = `recording_${ts.toISOString().replace(/[:.]/g,'-')}.${blob.type.includes('mp4')?'m4a':'webm'}`;
-          const a = document.createElement('a'); a.href = url; a.download = name; a.textContent = `⬇️ ${name}`;
-          listEl.prepend(a);
-          setTimeout(()=>{ if (confirm('Create a case‑note based on this session now?')) { openNoteModal(); }}, 20);
-        };
-        mediaRecorder.start(500);
-        startTs = Date.now(); timerInt = setInterval(updateTimer, 500); updateTimer();
-        statusEl.textContent = 'Recording…'; startBtn.disabled = true; stopBtn.disabled = false;
-        await acquireWakeLock();
-      } catch (e) {
-        alert('Could not start recording: '+ e.message);
-      }
-    }
-
-    function stopRecording() {
-      try { mediaRecorder && mediaRecorder.state !== 'inactive' && mediaRecorder.stop(); } catch {}
-      clearInterval(timerInt); timerEl.textContent = '00:00'; levelEl.style.width='0%';
-      statusEl.textContent = 'Stopped'; startBtn.disabled = false; stopBtn.disabled = true; releaseWakeLock();
-    }
-
-    function openNoteModal() {
-      const today = new Date().toISOString().slice(0,10); noteForm.elements['date'].value = today;
-      noteOutputWrap.style.display = 'none'; noteOutput.textContent = '';
-      noteModal.showModal();
-    }
-
-    noteForm.addEventListener('submit', (e)=>{
-      e.preventDefault();
-      const f = Object.fromEntries(new FormData(noteForm).entries());
-      const date = f.date || new Date().toISOString().slice(0,10);
-      const template = `COACHING\n\nYDC involved ${f.client} in a ${f.activity} to ${f.purpose}. ${f.observations ? f.observations.trim() + ' ' : ''}${f.outcomes ? ('Outcomes: ' + f.outcomes.trim()) : ''}\n\nNext step: ${f.next.trim()}\n\nDate: ${date}`.replace(/\n\n\n+/g,'\n\n');
-      noteOutput.textContent = template; noteOutputWrap.style.display = 'block';
-    });
-
-    copyNoteBtn.addEventListener('click', async ()=>{
-      try { await navigator.clipboard.writeText(noteOutput.textContent); copyNoteBtn.textContent='Copied ✔'; setTimeout(()=>copyNoteBtn.textContent='Copy',1200);} catch {}
-    });
-
-    downloadNoteBtn.addEventListener('click', ()=>{
-      const blob = new Blob([noteOutput.textContent], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href=url; a.download='case_note.txt'; a.click();
-      URL.revokeObjectURL(url);
-    });
-
-    startBtn.addEventListener('click', startRecording);
-    stopBtn.addEventListener('click', stopRecording);
-    clearListBtn.addEventListener('click', ()=>{ listEl.innerHTML=''; });
-
-    // Experimental voice commands (webkitSpeechRecognition only)
-    function setupCommands() {
-      const SR = window.SpeechRecognition || window.webkitSpeechRecognition; if (!SR) { alert('Voice commands unavailable on this browser.'); return; }
-      recognition = new SR(); recognition.continuous = true; recognition.interimResults = false; recognition.lang = 'en-AU';
-      recognition.onresult = (ev)=>{
-        const t = ev.results[ev.results.length-1][0].transcript.toLowerCase().trim();
-        if (t.includes('start') && startBtn.disabled === false) startRecording();
-        if (t.includes('stop') && stopBtn.disabled === false) stopRecording();
-        if (t.includes('note')) openNoteModal();
+          const data = await response.json();
+          if (data.error) {
+            throw new Error(data.error);
+          }
+          output.textContent = data.note || JSON.stringify(data, null, 2);
+          status.textContent = "Done ✅";
+        } catch (err) {
+          console.error(err);
+          status.textContent = "Error generating note.";
+          output.textContent = "❌ " + err.message;
+        }
       };
-      recognition.onend = ()=>{ recognizing = false; cmdBtn.textContent='🎤 Commands'; };
-      recognition.onerror = ()=>{ recognizing = false; cmdBtn.textContent='🎤 Commands'; };
-      recognizing = true; recognition.start(); cmdBtn.textContent='🎤 Listening…';
     }
-
-    cmdBtn.addEventListener('click', ()=>{ if (recognizing) { try { recognition.stop(); } catch {}; } else { setupCommands(); } });
-
-    // Minimal, inline manifest for Add to Home Screen
-    const manifest = { name: 'Case‑Note Recorder', short_name: 'Case‑Notes', start_url: '.', display: 'standalone', background_color: '#0b0b0c', theme_color: '#0b0b0c', icons: [{ src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAACq6z8QAAAAI0lEQVR42u3NMQEAAAgDIN8/9K0hQ0gGAAAAAAAAAAAAAAAAAAB8Lw8kAAE+OwcgAAAAAElFTkSuQmCC', sizes: '128x128', type: 'image/png' }] };
-    const link = document.createElement('link'); link.rel='manifest'; link.href = 'data:application/manifest+json,' + encodeURIComponent(JSON.stringify(manifest)); document.head.appendChild(link);
-
-    // Register a tiny service worker for offline shell
-    const swCode = `self.addEventListener('install', e=>{ self.skipWaiting(); }); self.addEventListener('activate', e=>{ self.clients.claim(); }); self.addEventListener('fetch', e=>{});`;
-    const swBlob = new Blob([swCode], {type:'text/javascript'}); const swUrl = URL.createObjectURL(swBlob);
-    if ('serviceWorker' in navigator) { navigator.serviceWorker.register(swUrl).catch(()=>{}); }
-  })();
   </script>
 </body>
 </html>
